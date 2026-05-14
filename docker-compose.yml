@@ -1,7 +1,29 @@
-version: '3.8'
-
 services:
-  agent-tars:
+  agent-tars-web:
+    image: node:22
+    working_dir: /workspace
+    command:
+      - sh
+      - -lc
+      - |
+        set -e
+        corepack enable
+        if [ ! -d multimodal/agent-tars/cli/dist ] || [ ! -d multimodal/tarko/agent-cli/dist ] || [ ! -d multimodal/agent-tars/core/dist ]; then
+          pnpm build
+        fi
+        node multimodal/agent-tars/cli/bin/cli.js run agent-tars --host 0.0.0.0 --port 8888
+    environment:
+      NODE_ENV: "production"
+      LANG: "en_US.UTF-8"
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./:/workspace
+    depends_on:
+      - agent-tars-browser-mcp
+    restart: unless-stopped
+
+  agent-tars-browser-mcp:
     build:
       context: ./packages/agent-infra/mcp-servers/browser
       dockerfile: Dockerfile
