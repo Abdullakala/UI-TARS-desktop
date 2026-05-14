@@ -2,16 +2,7 @@ services:
   agent-tars-web:
     image: node:22
     working_dir: /workspace
-    command:
-      - sh
-      - -lc
-      - |
-        set -e
-        corepack enable
-        if [ ! -d multimodal/agent-tars/cli/dist ] || [ ! -d multimodal/tarko/agent-cli/dist ] || [ ! -d multimodal/agent-tars/core/dist ]; then
-          pnpm build
-        fi
-        node multimodal/agent-tars/cli/bin/cli.js run agent-tars --host 0.0.0.0 --port 8888
+    command: ["node", "multimodal/agent-tars/cli/bin/cli.js", "run", "agent-tars", "--host", "0.0.0.0", "--port", "8888"]
     environment:
       NODE_ENV: "production"
       LANG: "en_US.UTF-8"
