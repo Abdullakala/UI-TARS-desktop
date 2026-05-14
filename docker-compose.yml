@@ -10,6 +10,8 @@ services:
     environment:
       LANG: "en_US.UTF-8"
       DBUS_SESSION_BUS_ADDRESS: "autolaunch:"
+    command: ["--host", "0.0.0.0", "--port", "8080", "--vision"]
+    restart: unless-stopped
     volumes:
       - ./data:/home/pptruser/data
     user: "10042"
